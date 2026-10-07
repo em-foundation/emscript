@@ -22,7 +22,7 @@ export function generate(stmt: Ts.Statement, tab: boolean = true) {
         Decl.generate(stmt)
     }
     else if (Ts.isExpressionStatement(stmt)) {
-        Out.print("%t%1;\n", Expr.make(stmt.expression))
+        Out.print("%t%1%2\n", Expr.make(stmt.expression), Expr.isAttr(stmt.expression) ? '' : ';')
     }
     else if (Ts.isReturnStatement(stmt)) {
         const retval = stmt.expression ? ` ${Expr.make(stmt.expression)}` : ''

@@ -8,6 +8,17 @@ import * as Type from './Type'
 
 let unescapeJs = require('unescape-js')
 
+export function isAttr(expr: Ts.Expression): boolean {
+    if (Ts.isTaggedTemplateExpression(expr)) {
+        const sf = Targ.context().ud.sf
+        const tag = expr.tag.getText(sf)
+        if (tag.endsWith('a$')) {
+            return true
+        }
+    }
+    return false
+}
+
 export function make(expr: Ts.Expression): string {
     const sf = Targ.context().ud.sf
     const tc = Targ.context().ud.tc
@@ -161,6 +172,9 @@ export function make(expr: Ts.Expression): string {
     else if (Ts.isTaggedTemplateExpression(expr)) {
         const tag = expr.tag.getText(sf)
         const ts = expr.template.getText(sf).slice(1, -1)
+        if (tag.endsWith('a$')) {
+            return `__attribute__((${ts}))`
+        }
         if (tag.endsWith('c$')) {
             return `'${ts}'`
         }
