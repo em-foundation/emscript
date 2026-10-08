@@ -233,28 +233,13 @@ function genStructDecl(ud: Unit.Desc, node: Ts.ClassDeclaration) {
     if (Ts.isClassDeclaration(node) && Decl.isStructDecl(node)) {
         const name = node.name!.text
         Out.print("%tstruct %1 {\n%+", name)
-        Out.print("%tstatic %1 $make() { return %1(); }\n", name)
+        Out.print("%tstatic %1 $make() { %1 s; return s; }\n", name)
         node.members.forEach(e => {
             Decl.generate(e)
         })
         genStructMethodDecls(ud, name)
         Out.print("%-%t};\n")
     }
-}
-
-function genStructDecls(ud: Unit.Desc) {
-    ud.sf.statements.forEach(node => {
-        if (Ts.isClassDeclaration(node) && Decl.isStructDecl(node)) {
-            const name = node.name!.text
-            Out.print("%tstruct %1 {\n%+", name)
-            Out.print("%tstatic %1 $make() { return %1(); }\n", name)
-            node.members.forEach(e => {
-                Decl.generate(e)
-            })
-            genStructMethodDecls(ud, name)
-            Out.print("%-%t};\n")
-        }
-    })
 }
 
 function genStructMethodDecls(ud: Unit.Desc, name: string) {
