@@ -358,7 +358,7 @@ function transpile(options: Ts.CompilerOptions) {
         let src = transOut.outputText
         src = src.replaceAll(/\$declare\((.+)\)/g, `__$$declare('${uid}', $1)`)
         src = src.replace('@$$emscript', '../em.lang/emscript')
-        src = src.replace('@$distro/', `../${Session.getDistro().bucket}/`)
+        src = src.replaceAll('@$distro/', `../${Session.getDistro().bucket}/`)
         src = src.replaceAll(/require\("@(.+)\.em"\)/g, 'require("../$1.em")')
         src = src.replaceAll(/require\("@(.+)\.em"\)/g, 'require("../$1.em")')
         src = src.replaceAll(/((\w+)) = \$clone\((\w+)\);/g, `$1 = __importStar(require("../${uid}__$2.em"))`)
